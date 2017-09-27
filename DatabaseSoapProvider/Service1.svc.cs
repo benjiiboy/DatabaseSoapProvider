@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,12 +15,17 @@ namespace DatabaseSoapProvider
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        private const string ConnectionString = "Server=tcp:server1233.database.windows.net,1433;Initial Catalog=StudentDatabase;Persist Security Info=False;User ID=benjamin;Password=Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private static string GetConnectionString()
+        {
+            var connectionStringSettingsCollection = ConfigurationManager.ConnectionStrings;
+            var connStringSettings = connectionStringSettingsCollection["BenjaminDatabaseAzure"];
+            return connStringSettings.ConnectionString;
+        }
 
         public int AddStudent(string name, int id)
         {
             const string insertStudent = "insert into students (name, id) values (@name, @id)";
-            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            using (SqlConnection databaseConnection = new SqlConnection(GetConnectionString()))
             {
                 databaseConnection.Open();
                 using (SqlCommand insertCommand = new SqlCommand(insertStudent, databaseConnection))
