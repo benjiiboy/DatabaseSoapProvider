@@ -12,36 +12,28 @@ namespace DatabaseSoapProvider
     [ServiceContract]
     public interface IService1
     {
+            [OperationContract]
+            IList<Student> GetAllStudents();
 
-        [OperationContract]
-        string GetData(int value);
+            [OperationContract]
+            Student GetStudentById(int id);
 
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
+            [OperationContract]
+            IList<Student> GetStudentsByName(string name);
 
-        // TODO: Add your service operations here
-    }
-
-
-    // Use a data contract as illustrated in the sample below to add composite types to service operations.
-    [DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
-        [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
+            [OperationContract]
+            int AddStudent(string name, int id);
         }
 
-        [DataMember]
-        public string StringValue
+        [DataContract]
+        public class Student
         {
-            get { return stringValue; }
-            set { stringValue = value; }
+            [DataMember]
+            public int Id;
+
+            [DataMember]
+            public string Name;
+
         }
+
     }
-}
